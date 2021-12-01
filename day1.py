@@ -1,6 +1,4 @@
-def read_day_lines(day):
-    with open(f"./inputs/day{day}.txt") as f:
-        return f.readlines()
+from utils import read_day_lines
 
 
 def part1():
