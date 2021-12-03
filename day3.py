@@ -1,24 +1,19 @@
 from collections import defaultdict
+from collections import Counter
 from utils import read_day_lines
 
 
 def count_bits(lines):
     bitnum = len(lines[0])
-    bits = [defaultdict(int) for i in range(bitnum)]
-
-    for i in range(bitnum):
-        for line in lines:
-            bit = line[i]
-            bits[i][bit] += 1
-
-    return bits, bitnum
+    return [Counter([line[i] for line in lines]) for i in range(bitnum)]
 
 
-def find_gamma(bits_counter, bitnum):
-    gamma_string = ""
-    for i in range(bitnum):
-        gamma_string += "1" if bits_counter[i]["1"] > bits_counter[i]["0"] else "0"
-    return(int(gamma_string, 2))
+def find_gamma(bits_counter):
+    gamma_list = []
+    for counter in bits_counter:
+        [(best_bit, _)] = counter.most_common(1)
+        gamma_list.append(best_bit)
+    return(int("".join(gamma_list), 2))
 
 
 def toggle(char):
@@ -67,8 +62,7 @@ def co2_scrubber_rating(lines):
 
 def part1():
     lines = [list(string.strip()) for string in read_day_lines(3)]
-    counted_bits, bitnum = count_bits(lines)
-    gamma = find_gamma(counted_bits, bitnum)
+    gamma = find_gamma(count_bits(lines))
     epsilon = find_epsilon(gamma)
     return(gamma * epsilon)
 
