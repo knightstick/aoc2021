@@ -61,14 +61,14 @@ def co2_scrubber_rating(lines):
 
 
 def part1():
-    lines = [list(string.strip()) for string in read_day_lines(3)]
+    lines = [list(string) for string in read_day_lines(3)]
     gamma = find_gamma(count_bits(lines))
     epsilon = find_epsilon(gamma)
     return(gamma * epsilon)
 
 
 def part2():
-    lines = [list(string.strip()) for string in read_day_lines(3)]
+    lines = [list(string) for string in read_day_lines(3)]
     return (oxygen_generator_rating(lines) * co2_scrubber_rating(lines))
 
 
