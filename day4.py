@@ -6,14 +6,10 @@ BOARD_WIDTH = 5
 
 
 def parse_board(string):
-    num_rows = [re.findall(r"(\d+)", line.strip())
-                for line in string.strip().split("\n")]
-
-    board = []
-    for num_row in num_rows:
-        board.append([(num_row[j], False) for j in range(BOARD_WIDTH)])
-
-    return board
+    return [
+        [(row[j], False) for j in range(BOARD_WIDTH)]
+        for row in
+        [re.findall(r"(\d+)", line.strip()) for line in string.strip().split("\n")]]
 
 
 def mark_number(board, number):
