@@ -16,9 +16,8 @@ class OctopusesGarden:
         self.resolve_flashes()
 
     def increment_all(self):
-        for i in range(self.height):
-            for j in range(self.width):
-                self.increment((i, j))
+        for point in self.all_points():
+            self.increment(point)
 
     def resolve_flashes(self):
         remaining = self.to_flash()
@@ -30,14 +29,7 @@ class OctopusesGarden:
             self.resolve_flashes()
 
     def to_flash(self):
-        result = []
-        for i in range(self.width):
-            for j in range(self.height):
-                point = (i, j)
-                if self.value_at(point) > 9:
-                    result.append(point)
-
-        return result
+        return [point for point in self.all_points() if self.value_at(point) > 9]
 
     def flash_around(self, point):
         for neighbour in self.get_neighbours(point):
@@ -58,13 +50,13 @@ class OctopusesGarden:
 
     def get_neighbours(self, point):
         x, y = point
-        all_points = [
+        candidates = [
             (x-1, y+1), (x, y+1), (x+1, y+1),
             (x-1, y), (x+1, y),
             (x-1, y-1), (x, y-1), (x+1, y-1)
         ]
 
-        return list(filter(lambda point: self.in_bounds(point), all_points))
+        return list(filter(lambda point: self.in_bounds(point), candidates))
 
     def in_bounds(self, point):
         x, y = point
@@ -73,8 +65,8 @@ class OctopusesGarden:
                 return True
         return False
 
-    def all_flashed(self):
-        return all(map(lambda value: value == 0, self.all_values()))
+    def all_points(self):
+        return [(i, j) for i in range(self.width) for j in range(self.height)]
 
     def all_values(self):
         return [octopus for row in self.octopi for octopus in row]
@@ -93,22 +85,10 @@ def part2(lines):
     while True:
         step += 1
         octopi.step()
-        if octopi.all_flashed():
+        if all(map(lambda value: value == 0, octopi.all_values())):
             return step
 
 
 if __name__ == '__main__':
-    input = """5483143223
-2745854711
-5264556173
-6141336146
-6357385478
-4167524645
-2176841721
-6882881134
-4846848554
-5283751526
-    """
-    lines = input.strip().split("\n")
     lines = read_day_lines(11)
     print(part1(lines), part2(lines))
